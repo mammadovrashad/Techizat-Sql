@@ -2,22 +2,24 @@
 # Istifadə olunub
 
 
-#Store Prosedure
-#User Defined Functions
+# Store Prosedure
+# User Defined Functions
 --      Scalar Value
-#View 
-#Triggers
--- Constraint
+# View 
+# Triggers
+# Constraint
 --    Foreign Key
 --    Primary Key
 --    Check
 --    Not Null
 --    Unique
--- Conditional Operator
+# Conditional Operator
 --    İf
--- Methods 
+# Methods 
 --    GetDate
--- İnner Join
+# Joins 
+--   Inner Join
+# DDL and DML
 -- Select
 -- Delete
 -- Update
