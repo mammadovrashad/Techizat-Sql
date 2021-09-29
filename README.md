@@ -2,8 +2,8 @@
 # Istifadə olunub
 
 
--- Store Prosedure
--- User Defined Functions
+# Store Prosedure
+# User Defined Functions
 --      Scalar Value
 -- View 
 --Triggers
