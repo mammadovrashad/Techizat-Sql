@@ -380,3 +380,61 @@ Select @docId=dbo.Doc_GetById('Opera')
 
 exec GetAllDocumentCommentByDocId @doc_id=@docId
 
+
+
+--1.f CreateDocumentApprovalRequest proc 
+--    User documenti ya 7 ya reject edir,
+--    her iki emeliyyatdada idye gore document tapilir, documentin hazirki docLevelIdsine gore current Level tapilir
+--    approve olarsa current levelin order + 1 yeni next level tapilir,
+--    reject olarse current levelin order - 1 yen prev levele tapilir - eger current level ozu ele 1 deyilse 
+
+
+
+-- documentin id-sine uygun document levelin Id-sinin getirilmesi Function
+Create function GetDocumentLevelByDocumentId(@doc_id tinyint )
+returns tinyint
+begin
+declare @doc_level_id tinyint
+Select @doc_level_id = DocumentLevelId From DocumentLevel as dl inner join Document as d  ON d.DocumentLevelId=dl.Id where d.Id=@doc_id 
+return @doc_level_id
+end
+
+
+-- documentin id-sine uygun document levelin Orderinin getirilmesi ucun Function
+Create function GetDocumentLevelOrderByDocumentId(@doc_id tinyint )
+returns tinyint
+begin
+declare @order tinyint
+Select @order=[Order] From DocumentLevel as dl inner join Document as d  ON d.DocumentLevelId=dl.Id where d.Id=@doc_id 
+return @order 
+end
+
+
+
+
+Create proc DocumentApprovalRequest(@doc_status nvarchar(30),@document_id tinyint)
+as
+begin
+declare @order tinyint 
+declare @doc_level_id tinyint
+declare @status_name nvarchar(50)
+Select @status_name=Name From AprowOrRequest as d inner join [Status] as s ON d.StatusId=s.Id inner join Document as doc ON d.DocumentId=doc.Id
+if (@status_name='Aprow')
+begin
+ Select @order=dbo.GetDocumentLevelOrderByDocumentId(@document_id)
+ set @order=@order+1
+ Select @doc_level_id=dbo.GetDocumentLevelByDocumentId(@document_id)
+ Update  DocumentLevel set [Order]=@order  Where Id=@doc_level_id
+end
+else
+begin
+if(@order!=1)
+begin
+set @order=@order-1
+end
+end
+end
+
+
+exec DocumentApprovalRequest @doc_status='Request',@document_id=3
+
